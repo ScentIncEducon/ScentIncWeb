@@ -1,0 +1,99 @@
+import React, { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import { FaPerfumeBottle, FaPlus } from "lucide-react";
+
+const initialScents = [
+  {
+    id: 1,
+    name: "Lavender Bliss",
+    notes: "Lavender, Vanilla, Musk",
+    fragrance: "Floral & Sweet",
+    cost: "$50",
+    location: "Paris, France",
+    contact: "+33 1 23 45 67 89",
+  },
+  {
+    id: 2,
+    name: "Citrus Burst",
+    notes: "Lemon, Orange, Bergamot",
+    fragrance: "Fresh & Citrusy",
+    cost: "$45",
+    location: "Milan, Italy",
+    contact: "+39 123 456 7890",
+  },
+  {
+    id: 3,
+    name: "Oud Elegance",
+    notes: "Oud, Sandalwood, Amber",
+    fragrance: "Woody & Exotic",
+    cost: "$120",
+    location: "Dubai, UAE",
+    contact: "+971 50 123 4567",
+  },
+];
+
+export default function ScentInc() {
+  const [scents, setScents] = useState(initialScents);
+  const [selectedScent, setSelectedScent] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(true);
+
+  const addScent = () => {
+    const newScent = {
+      id: scents.length + 1,
+      name: "New Scent",
+      notes: "Custom Notes",
+      fragrance: "Custom Fragrance",
+      cost: "$0",
+      location: "Unknown",
+      contact: "N/A",
+    };
+    setScents([...scents, newScent]);
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 p-6 text-center">
+      <h1 className="text-4xl font-bold mb-6">ScentInc</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        {scents.map((scent) => (
+          <motion.div key={scent.id} whileHover={{ scale: 1.1 }}>
+            <Card
+              className="p-6 cursor-pointer bg-white shadow-md rounded-2xl"
+              onClick={() => setSelectedScent(scent)}
+            >
+              <FaPerfumeBottle size={50} className="mx-auto text-purple-500" />
+              <h2 className="text-xl font-semibold mt-3">{scent.name}</h2>
+            </Card>
+          </motion.div>
+        ))}
+      </div>
+
+      {isAdmin && (
+        <Button className="mt-6" onClick={addScent}>
+          <FaPlus className="mr-2" /> Add Scent
+        </Button>
+      )}
+
+      {selectedScent && (
+        <div className="mt-8 p-6 bg-white shadow-lg rounded-2xl max-w-md mx-auto">
+          <h2 className="text-2xl font-bold">{selectedScent.name}</h2>
+          <p><strong>Notes:</strong> {selectedScent.notes}</p>
+          <p><strong>Fragrance:</strong> {selectedScent.fragrance}</p>
+          <p><strong>Cost:</strong> {selectedScent.cost}</p>
+          <p><strong>Location:</strong> {selectedScent.location}</p>
+          <p><strong>Contact:</strong> {selectedScent.contact}</p>
+          <a
+            href={`https://wa.me/8484927736`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block mt-4 text-green-600 font-bold"
+          >
+            Message Us on WhatsApp
+          </a>
+          <Button className="mt-4" onClick={() => setSelectedScent(null)}>Close</Button>
+        </div>
+      )}
+    </div>
+  );
+}
